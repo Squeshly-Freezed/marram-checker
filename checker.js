@@ -5,9 +5,9 @@ import 'dotenv/config';
 async function getSessionCookie(browser) {
   const page = await browser.newPage();
   await page.goto('https://www.marram.co.nz/user/login');
-  
-  await page.getByLabel('Username (Email Address)').fill(process.env.MARRAM_EMAIL);
-  await page.getByPlaceholder("password").fill(process.env.MARRAM_PASSWORD);
+  await page.waitForLoadState('networkidle');
+  await page.getByLabel('Username (Email Address)', { timeout: 60000 }).fill(process.env.MARRAM_EMAIL);
+  await page.getByPlaceholder("password", { timeout: 60000 }).fill(process.env.MARRAM_PASSWORD);
     
 
   await page.getByRole('button', { name: 'Login' }).click();
