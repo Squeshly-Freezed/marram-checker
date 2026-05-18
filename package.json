@@ -2,14 +2,15 @@
   "name": "marram-checker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "checker.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
+  
   "dependencies": {
     "dotenv": "^17.4.2",
     "nodemailer": "^8.0.7",
