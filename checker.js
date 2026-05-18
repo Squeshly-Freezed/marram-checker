@@ -53,7 +53,7 @@ async function sendAlert(unitIds) {
 }
 
 async function main() {
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
 
   try {
     const cookies = await getSessionCookie(browser);
