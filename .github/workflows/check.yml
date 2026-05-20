@@ -20,7 +20,8 @@ jobs:
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-
+      - name: Check IP
+        run: curl https://api.ipify.org
       - name: Run checker
         env:
           MARRAM_EMAIL: ${{ secrets.MARRAM_EMAIL }}
