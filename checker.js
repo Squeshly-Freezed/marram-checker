@@ -1,15 +1,20 @@
 import { chromium } from 'playwright';
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
+import cron from 'node-cron';
 
 async function getSessionCookie(browser) {
   const page = await browser.newPage();
-await page.goto('https://www.marram.co.nz/user/login', { timeout: 60000 });
-await page.waitForLoadState('domcontentloaded');  // less strict than networkidle
-await page.locator('input[name="username"]', { timeout: 60000 }).fill(process.env.MARRAM_EMAIL);
-await page.locator('input[type="password"]', { timeout: 60000 }).fill(process.env.MARRAM_PASSWORD);
-await page.getByRole('button', { name: 'Login' }).click();
-await page.waitForLoadState('networkidle');
+
+  await page.goto('https://www.marram.co.nz/user/login');
+  await page.waitForLoadState('domcontentloaded');
+  
+  await page.getByLabel('Username (Email Address)').fill(process.env.MARRAM_EMAIL);
+  await page.getByPlaceholder("password").fill(process.env.MARRAM_PASSWORD);
+    
+
+  await page.getByRole('button', { name: 'Login' }).click();
+  await page.waitForLoadState('networkidle');
 
   // Extract cookies from the browser session
   const cookies = await page.context().cookies();
@@ -80,4 +85,12 @@ async function main() {
   }
 }
 
+cron.schedule('0 * * * *', () => {
+  const timestamp = new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland' });
+  console.log(`[${timestamp}] Running availability check...`);
+  main();
+});
+
+const timestamp = new Date().toLocaleString('en-NZ', { timeZone: 'Pacific/Auckland' });
+console.log(`[${timestamp}] Checker started. First run executing now...`);
 main();
